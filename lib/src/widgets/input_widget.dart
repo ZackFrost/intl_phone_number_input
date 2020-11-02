@@ -180,7 +180,7 @@ class _InputWidgetState extends State<InternationalPhoneNumberInput> {
   void initialiseWidget() async {
     if (widget.initialValue != null) {
       if (widget.initialValue.phoneNumber != null &&
-          widget.initialValue.phoneNumber.isNotEmpty && _isValidPhoneNumber(widget.initialValue.phoneNumber)
+          widget.initialValue.phoneNumber.isNotEmpty && _isValidPhoneNumber(widget.initialValue)
           ) {
         controller.text =
             await PhoneNumber.getParsableNumber(widget.initialValue);
