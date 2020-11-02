@@ -161,7 +161,7 @@ class _InputWidgetState extends State<InternationalPhoneNumberInput> {
     return (value != null);
   }
 
-  bool _isValidPhoneNumber(PhoneNumber number) async{
+  dynamic _isValidPhoneNumber(PhoneNumber number) async{
     if(isWeb()) return true;
     return await PhoneNumberUtil.isValidPhoneNumber(phoneNumber: number.phoneNumber, isoCode: number.isoCode);
   }
@@ -170,7 +170,7 @@ class _InputWidgetState extends State<InternationalPhoneNumberInput> {
   void initialiseWidget() async {
     if (widget.initialValue != null) {
       if (widget.initialValue.phoneNumber != null &&
-          widget.initialValue.phoneNumber.isNotEmpty && _isValidPhoneNumber(widget.initialValue)
+          widget.initialValue.phoneNumber.isNotEmpty && await _isValidPhoneNumber(widget.initialValue)
           ) {
         controller.text =
             await PhoneNumber.getParsableNumber(widget.initialValue);
