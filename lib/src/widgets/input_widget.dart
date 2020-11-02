@@ -150,15 +150,38 @@ class _InputWidgetState extends State<InternationalPhoneNumberInput> {
     }
     super.didUpdateWidget(oldWidget);
   }
+  
+  bool isWeb() {
+    bool result = false;
+   try{
+     result = (Platform.isIOS && Platform.isAndroid);
+   } catch(ex){
+     result = true;
+   }
+   return result;
+  }
+  
+  bool isWeb() {
+   String value;
+   try{
+      if(Platform.isIOS && Platform.isAndroid){} //Web platform throws a platform exception on this condition
+    } catch(ex){
+      value = ex.toString();
+    }
+    return (value != null);
+  }
+
+  bool _isValidPhoneNumber(PhoneNumber number) async{
+    if(isWeb()) return true;
+    return await PhoneNumberUtil.isValidPhoneNumber(phoneNumber: number.phoneNumber, isoCode: number.isoCode);
+  }
 
   /// [initialiseWidget] sets initial values of the widget
   void initialiseWidget() async {
     if (widget.initialValue != null) {
       if (widget.initialValue.phoneNumber != null &&
-          widget.initialValue.phoneNumber.isNotEmpty &&
-          await PhoneNumberUtil.isValidPhoneNumber(
-              phoneNumber: widget.initialValue.phoneNumber,
-              isoCode: widget.initialValue.isoCode)) {
+          widget.initialValue.phoneNumber.isNotEmpty && _isValidPhoneNumber(widget.initialValue.phoneNumber)
+          ) {
         controller.text =
             await PhoneNumber.getParsableNumber(widget.initialValue);
 
