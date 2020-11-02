@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:intl_phone_number_input/src/models/country_list.dart';
 import 'package:libphonenumber/libphonenumber.dart';
 import 'package:libphonenumber/libphonenumber.dart' as lib;
+import 'dart:io';
 
 enum PhoneNumberType {
   FIXED_LINE,
@@ -74,6 +75,16 @@ class PhoneNumber extends Equatable {
       isoCode: regionInfo.isoCode,
     );
   }
+  
+  static bool isWeb() {
+    String value;
+    try{
+      if(Platform.isIOS && Platform.isAndroid){} //Web platform throws a platform exception on this condition
+    } catch(ex){
+      value = ex.toString();
+    }
+    return (value != null);
+  }
 
   /// Accepts a [PhoneNumber] object and returns a formatted phone number String
   static Future<String> getParsableNumber(PhoneNumber phoneNumber) async {
@@ -84,7 +95,7 @@ class PhoneNumber extends Equatable {
       
       if(phoneNumber.dialCode != null){
         number = phoneNumber;
-        formattedNumber = number.phoneNumber.substring(0, number.dialCode.length - 1) + " " + number.phoneNumber.substring(number.dialCode.length);
+        formattedNumber = number.phoneNumber.substring(number.dialCode.length);
       } else {
        number = await getRegionInfoFromPhoneNumber(
         phoneNumber.phoneNumber,
@@ -96,7 +107,7 @@ class PhoneNumber extends Equatable {
       );
       }
        
-      return formattedNumber.replaceAll(
+      return (isWeb())? formattedNumber : formattedNumber.replaceAll(
         RegExp('^([\\+]?${number.dialCode}[\\s]?)'),
         '',
       );
