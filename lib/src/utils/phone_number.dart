@@ -79,10 +79,15 @@ class PhoneNumber extends Equatable {
   static Future<String> getParsableNumber(PhoneNumber phoneNumber) async {
     assert(phoneNumber != null);
     if (phoneNumber.isoCode != null) {
-      PhoneNumber number = await getRegionInfoFromPhoneNumber(
+      PhoneNumber number;
+      if(phoneNumber.dialCode != null){
+        number = phoneNumber;
+      } else {
+       number = await getRegionInfoFromPhoneNumber(
         phoneNumber.phoneNumber,
         phoneNumber.isoCode,
-      );
+      ); 
+      }
       String formattedNumber = await PhoneNumberUtil.formatAsYouType(
         phoneNumber: number.phoneNumber,
         isoCode: number.isoCode,
