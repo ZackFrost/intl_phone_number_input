@@ -152,16 +152,6 @@ class _InputWidgetState extends State<InternationalPhoneNumberInput> {
   }
   
   bool isWeb() {
-    bool result = false;
-   try{
-     result = (Platform.isIOS && Platform.isAndroid);
-   } catch(ex){
-     result = true;
-   }
-   return result;
-  }
-  
-  bool isWeb() {
    String value;
    try{
       if(Platform.isIOS && Platform.isAndroid){} //Web platform throws a platform exception on this condition
