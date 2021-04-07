@@ -11,6 +11,7 @@ import 'package:intl_phone_number_input/src/utils/test/test_helper.dart';
 import 'package:intl_phone_number_input/src/utils/util.dart';
 import 'package:intl_phone_number_input/src/utils/widget_view.dart';
 import 'package:intl_phone_number_input/src/widgets/selector_button.dart';
+import 'dart:io';
 
 /// Enum for [SelectorButton] types.
 ///
@@ -172,16 +173,28 @@ class _InputWidgetState extends State<InternationalPhoneNumberInput> {
   void initialiseWidget() async {
     if (widget.initialValue != null) {
       if (widget.initialValue.phoneNumber != null &&
-          widget.initialValue.phoneNumber.isNotEmpty &&
-          await PhoneNumberUtil.isValidNumber(
-              phoneNumber: widget.initialValue.phoneNumber,
-              isoCode: widget.initialValue.isoCode)) {
+          widget.initialValue.phoneNumber.isNotEmpty && await _isValidPhoneNumber(widget.initialValue)) {
         controller.text =
             await PhoneNumber.getParsableNumber(widget.initialValue);
 
         phoneNumberControllerListener();
       }
     }
+  }
+
+  bool isWeb() {
+    String value;
+    try{
+      if(Platform.isIOS && Platform.isAndroid){} //Web platform throws a platform exception on this condition
+    } catch(ex){
+      value = ex.toString();
+    }
+    return (value != null);
+  }
+
+  Future<bool> _isValidPhoneNumber(PhoneNumber number) async{
+    if(isWeb()) return true;
+    return await PhoneNumberUtil.isValidNumber(phoneNumber: number.phoneNumber, isoCode: number.isoCode);
   }
 
   /// loads countries from [Countries.countryList] and selected Country
