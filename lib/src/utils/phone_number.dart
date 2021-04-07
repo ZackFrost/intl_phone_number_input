@@ -100,12 +100,13 @@ class PhoneNumber extends Equatable {
           phoneNumber.phoneNumber,
           phoneNumber.isoCode,
         );
-      }
-
-      formattedNumber = await PhoneNumberUtil.formatAsYouType(
+        
+        formattedNumber = await PhoneNumberUtil.formatAsYouType(
         phoneNumber: number.phoneNumber,
         isoCode: number.isoCode,
       );
+      }
+
       return (isWeb())? formattedNumber : formattedNumber.replaceAll(
         RegExp('^([\\+]?${number.dialCode}[\\s]?)'),
         '',
