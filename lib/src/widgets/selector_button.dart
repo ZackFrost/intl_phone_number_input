@@ -6,6 +6,7 @@ import 'package:intl_phone_number_input/src/widgets/countries_search_list_widget
 import 'package:intl_phone_number_input/src/widgets/input_widget.dart';
 import 'package:intl_phone_number_input/src/widgets/item.dart';
 
+/// [SelectorButton]
 class SelectorButton extends StatelessWidget {
   final List<Country> countries;
   final Country country;
@@ -61,7 +62,7 @@ class SelectorButton extends StatelessWidget {
             key: Key(TestHelper.DropdownButtonKeyValue),
             padding: EdgeInsets.zero,
             minWidth: 0,
-            onPressed: countries.isNotEmpty && countries.length > 1
+            onPressed: countries.isNotEmpty && countries.length > 1 && isEnabled
                 ? () async {
                     Country selected;
                     if (selectorConfig.selectorType ==
@@ -90,6 +91,7 @@ class SelectorButton extends StatelessWidget {
           );
   }
 
+  /// Converts the list [countries] to `DropdownMenuItem`
   List<DropdownMenuItem<Country>> mapCountryToDropdownItem(
       List<Country> countries) {
     return countries.map((country) {
@@ -107,6 +109,7 @@ class SelectorButton extends StatelessWidget {
     }).toList();
   }
 
+  /// shows a Dialog with list [countries] if the [PhoneInputSelectorType.DIALOG] is selected
   Future<Country> showCountrySelectorDialog(
       BuildContext context, List<Country> countries) {
     return showDialog(
@@ -128,6 +131,7 @@ class SelectorButton extends StatelessWidget {
     );
   }
 
+  /// shows a Dialog with list [countries] if the [PhoneInputSelectorType.BOTTOM_SHEET] is selected
   Future<Country> showCountrySelectorBottomSheet(
       BuildContext context, List<Country> countries) {
     return showModalBottomSheet(
@@ -143,30 +147,36 @@ class SelectorButton extends StatelessWidget {
           padding:
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           duration: const Duration(milliseconds: 100),
-          child: DraggableScrollableSheet(
-            builder: (BuildContext context, ScrollController controller) {
-              return Container(
-                decoration: ShapeDecoration(
-                  color: selectorConfig.backgroundColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(12),
-                      topRight: Radius.circular(12),
+          child: Stack(children: [
+            GestureDetector(
+              onTap: () => Navigator.pop(context),
+            ),
+            DraggableScrollableSheet(
+              builder: (BuildContext context, ScrollController controller) {
+                return Container(
+                  decoration: ShapeDecoration(
+                    color: selectorConfig.backgroundColor ??
+                        Theme.of(context).canvasColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                        topRight: Radius.circular(12),
+                      ),
                     ),
                   ),
-                ),
-                child: CountrySearchListWidget(
-                  countries,
-                  locale,
-                  searchBoxDecoration: searchBoxDecoration,
-                  scrollController: controller,
-                  showFlags: selectorConfig.showFlags,
-                  useEmoji: selectorConfig.useEmoji,
-                  autoFocus: autoFocusSearchField,
-                ),
-              );
-            },
-          ),
+                  child: CountrySearchListWidget(
+                    countries,
+                    locale,
+                    searchBoxDecoration: searchBoxDecoration,
+                    scrollController: controller,
+                    showFlags: selectorConfig.showFlags,
+                    useEmoji: selectorConfig.useEmoji,
+                    autoFocus: autoFocusSearchField,
+                  ),
+                );
+              },
+            ),
+          ]),
         );
       },
     );

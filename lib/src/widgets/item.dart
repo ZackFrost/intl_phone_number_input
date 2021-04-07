@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/src/models/country_model.dart';
 import 'package:intl_phone_number_input/src/utils/util.dart';
 
+/// [Item]
 class Item extends StatelessWidget {
   final Country country;
   final bool showFlag;
@@ -24,7 +25,9 @@ class Item extends StatelessWidget {
       child: Row(
         textDirection: TextDirection.ltr,
         mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
+          SizedBox(width: 12.0),
           _Flag(
             country: country,
             showFlag: showFlag,

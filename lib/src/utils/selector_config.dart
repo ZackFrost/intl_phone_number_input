@@ -19,6 +19,9 @@ class SelectorConfig {
   /// [useEmoji], uses emoji flags instead of png assets
   final bool useEmoji;
 
+  /// [backgroundColor], used to set the backgroundColor for BOTTOM_SHEET selector type
+  @Deprecated(
+      'backgroundColor would be remove in v0.7.0 and would be replaced with Theme.of(context).canvasColor. After giving it much though I decided to go ahead with this because DROPDOWN and DIALOG uses Theme.of(context).canvasColor as their backgroundColor respectively')
   final Color backgroundColor;
 
   /// [countryComparator], sort the country list according to the comparator.
@@ -26,11 +29,15 @@ class SelectorConfig {
   /// Sorting is disabled by default
   final CountryComparator countryComparator;
 
+  /// [setSelectorButtonAsPrefixIcon], this sets/places the selector button inside the [TextField] as a prefixIcon.
+  final bool setSelectorButtonAsPrefixIcon;
+
   const SelectorConfig({
     this.selectorType = PhoneInputSelectorType.DROPDOWN,
     this.showFlags = true,
     this.useEmoji = false,
-    this.backgroundColor = Colors.white,
+    this.backgroundColor,
     this.countryComparator,
+    this.setSelectorButtonAsPrefixIcon = false,
   });
 }
